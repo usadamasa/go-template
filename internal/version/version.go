@@ -1,12 +1,31 @@
 package version
 
-import "runtime/debug"
+import (
+	"runtime/debug"
+	"strings"
+)
 
 // Info はバージョン情報を保持する構造体
 type Info struct {
 	Version string
 	Commit  string
 	Date    string
+}
+
+// DisplayString はバージョン情報を表示用文字列にフォーマットする
+// commit/dateがデフォルト値の場合は省略する
+func (i Info) DisplayString() string {
+	var parts []string
+	if i.Date != "unknown" {
+		parts = append(parts, i.Date)
+	}
+	if i.Commit != "none" {
+		parts = append(parts, i.Commit)
+	}
+	if len(parts) == 0 {
+		return i.Version
+	}
+	return i.Version + " (" + strings.Join(parts, ", ") + ")"
 }
 
 // テスト用に差し替え可能

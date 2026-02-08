@@ -17,10 +17,10 @@ func init() {
 	rootCmd.SetVersionTemplate("{{.Name}} version {{.Version}} ({{.Date}}, {{.Commit}})\n")
 }
 
-func SetVersion(v, c, d string) {
-	version = v
-	rootCmd.Version = v
-	rootCmd.SetVersionTemplate("{{.Name}} version " + v + " (" + d + ", " + c + ")\n")
+func SetVersion(displayVersion string) {
+	version = displayVersion
+	rootCmd.Version = displayVersion
+	rootCmd.SetVersionTemplate("{{.Name}} version {{.Version}}\n")
 }
 
 func Execute() error {

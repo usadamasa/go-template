@@ -16,7 +16,7 @@ var (
 
 func main() {
 	info := versionpkg.Resolve(version, commit, date)
-	cmd.SetVersion(info.Version, info.Commit, info.Date)
+	cmd.SetVersion(info.DisplayString())
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
