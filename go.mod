@@ -1,4 +1,4 @@
-module github.com/OWNER/REPO
+module github.com/usadamasa/go-template
 
 go 1.24
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/OWNER/REPO/cmd"
+	"github.com/usadamasa/go-template/cmd"
 )
 
 var (

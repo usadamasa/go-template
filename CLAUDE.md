@@ -32,7 +32,7 @@ task clean    # Remove build artifacts
 Do not use `fmt.Print*` for console output. Use `internal/log` package instead:
 
 ```go
-import "github.com/OWNER/REPO/internal/log"
+import "github.com/usadamasa/go-template/internal/log"
 
 // Use package-level functions
 log.Println("Hello")

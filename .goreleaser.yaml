@@ -2,16 +2,16 @@
 
 version: 2
 
-project_name: BINARY_NAME
+project_name: go-template
 
 before:
   hooks:
     - go mod tidy
 
 builds:
-  - id: BINARY_NAME
+  - id: go-template
     main: .
-    binary: BINARY_NAME
+    binary: go-template
     env:
       - CGO_ENABLED=0
     goos:

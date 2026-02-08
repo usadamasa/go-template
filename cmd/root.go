@@ -11,9 +11,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "BINARY_NAME",
-	Short:   "PROJECT_NAME - Short description",
-	Long:    `PROJECT_NAME is a CLI application built with Cobra.`,
+	Use:     "go-template",
+	Short:   "go-template - Short description",
+	Long:    `go-template is a CLI application built with Cobra.`,
 	Version: version,
 }
 
