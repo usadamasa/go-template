@@ -4,16 +4,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
-)
+var version = "dev"
 
 var rootCmd = &cobra.Command{
-	Use:     "BINARY_NAME",
-	Short:   "PROJECT_NAME - Short description",
-	Long:    `PROJECT_NAME is a CLI application built with Cobra.`,
+	Use:     "go-template",
+	Short:   "go-template - Short description",
+	Long:    `go-template is a CLI application built with Cobra.`,
 	Version: version,
 }
 
@@ -23,8 +19,6 @@ func init() {
 
 func SetVersion(v, c, d string) {
 	version = v
-	commit = c
-	date = d
 	rootCmd.Version = v
 	rootCmd.SetVersionTemplate("{{.Name}} version " + v + " (" + d + ", " + c + ")\n")
 }

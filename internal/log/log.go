@@ -27,32 +27,32 @@ func New(out, err io.Writer) *Logger {
 
 // Print prints to stdout.
 func (l *Logger) Print(a ...any) {
-	fmt.Fprint(l.out, a...)
+	_, _ = fmt.Fprint(l.out, a...)
 }
 
 // Println prints to stdout with a newline.
 func (l *Logger) Println(a ...any) {
-	fmt.Fprintln(l.out, a...)
+	_, _ = fmt.Fprintln(l.out, a...)
 }
 
 // Printf prints formatted output to stdout.
 func (l *Logger) Printf(format string, a ...any) {
-	fmt.Fprintf(l.out, format, a...)
+	_, _ = fmt.Fprintf(l.out, format, a...)
 }
 
 // Error prints to stderr.
 func (l *Logger) Error(a ...any) {
-	fmt.Fprint(l.err, a...)
+	_, _ = fmt.Fprint(l.err, a...)
 }
 
 // Errorln prints to stderr with a newline.
 func (l *Logger) Errorln(a ...any) {
-	fmt.Fprintln(l.err, a...)
+	_, _ = fmt.Fprintln(l.err, a...)
 }
 
 // Errorf prints formatted output to stderr.
 func (l *Logger) Errorf(format string, a ...any) {
-	fmt.Fprintf(l.err, format, a...)
+	_, _ = fmt.Fprintf(l.err, format, a...)
 }
 
 // Package-level functions using the default logger.

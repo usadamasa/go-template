@@ -1,6 +1,6 @@
 # Binary
 bin/
-BINARY_NAME
+go-template
 
 # Go
 *.exe

@@ -1,19 +1,19 @@
-# PROJECT_NAME
+# go-template
 
 Short description of what this project does.
 
 ## Installation
 
 ```bash
-go install github.com/OWNER/REPO@latest
+go install github.com/usadamasa/go-template@latest
 ```
 
-Or download from [Releases](https://github.com/OWNER/REPO/releases).
+Or download from [Releases](https://github.com/usadamasa/go-template/releases).
 
 ## Usage
 
 ```bash
-BINARY_NAME --help
+go-template --help
 ```
 
 ## Development
