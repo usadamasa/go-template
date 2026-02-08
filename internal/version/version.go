@@ -16,11 +16,11 @@ type Info struct {
 // commit/dateがデフォルト値の場合は省略する
 func (i Info) DisplayString() string {
 	var parts []string
-	if i.Date != "unknown" {
-		parts = append(parts, i.Date)
-	}
 	if i.Commit != "none" {
-		parts = append(parts, i.Commit)
+		parts = append(parts, "commit: "+i.Commit)
+	}
+	if i.Date != "unknown" {
+		parts = append(parts, "built: "+i.Date)
 	}
 	if len(parts) == 0 {
 		return i.Version

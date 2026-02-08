@@ -15,7 +15,7 @@ func TestDisplayString(t *testing.T) {
 		{
 			name: "all fields set",
 			info: Info{Version: "v1.2.3", Commit: "abc1234", Date: "2024-01-01T00:00:00Z"},
-			want: "v1.2.3 (2024-01-01T00:00:00Z, abc1234)",
+			want: "v1.2.3 (commit: abc1234, built: 2024-01-01T00:00:00Z)",
 		},
 		{
 			name: "default commit and date",
@@ -25,12 +25,12 @@ func TestDisplayString(t *testing.T) {
 		{
 			name: "only commit available",
 			info: Info{Version: "v0.0.2", Commit: "abc1234", Date: "unknown"},
-			want: "v0.0.2 (abc1234)",
+			want: "v0.0.2 (commit: abc1234)",
 		},
 		{
 			name: "only date available",
 			info: Info{Version: "v0.0.2", Commit: "none", Date: "2024-01-01T00:00:00Z"},
-			want: "v0.0.2 (2024-01-01T00:00:00Z)",
+			want: "v0.0.2 (built: 2024-01-01T00:00:00Z)",
 		},
 	}
 
