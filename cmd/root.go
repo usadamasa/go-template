@@ -14,13 +14,13 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.SetVersionTemplate("{{.Name}} version {{.Version}} ({{.Date}}, {{.Commit}})\n")
+	rootCmd.SetVersionTemplate("{{.Name}} {{.Version}}\n")
 }
 
 func SetVersion(displayVersion string) {
 	version = displayVersion
 	rootCmd.Version = displayVersion
-	rootCmd.SetVersionTemplate("{{.Name}} version {{.Version}}\n")
+	rootCmd.SetVersionTemplate("{{.Name}} {{.Version}}\n")
 }
 
 func Execute() error {
