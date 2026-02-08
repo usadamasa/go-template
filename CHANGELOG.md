@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.3](https://github.com/usadamasa/go-template/compare/v0.0.2...v0.0.3) - 2026-02-08
+- バージョン表示でcommit/dateが不明な場合に括弧を省略 by @usadamasa in https://github.com/usadamasa/go-template/pull/7
+
 ## [v0.0.2](https://github.com/usadamasa/go-template/compare/v0.0.1...v0.0.2) - 2026-02-08
 - go install時のバージョン情報をReadBuildInfoでフォールバック by @usadamasa in https://github.com/usadamasa/go-template/pull/4
 
