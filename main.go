@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/usadamasa/go-template/cmd"
+	versionpkg "github.com/usadamasa/go-template/internal/version"
 )
 
 var (
@@ -14,7 +15,8 @@ var (
 )
 
 func main() {
-	cmd.SetVersion(version, commit, date)
+	info := versionpkg.Resolve(version, commit, date)
+	cmd.SetVersion(info.Version, info.Commit, info.Date)
 	if err := cmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
