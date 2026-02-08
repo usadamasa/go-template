@@ -4,11 +4,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	version = "dev"
-	commit  = "none"
-	date    = "unknown"
-)
+var version = "dev"
 
 var rootCmd = &cobra.Command{
 	Use:     "go-template",
@@ -23,8 +19,6 @@ func init() {
 
 func SetVersion(v, c, d string) {
 	version = v
-	commit = c
-	date = d
 	rootCmd.Version = v
 	rootCmd.SetVersionTemplate("{{.Name}} version " + v + " (" + d + ", " + c + ")\n")
 }
