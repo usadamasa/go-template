@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.0.4](https://github.com/usadamasa/go-template/compare/v0.0.3...v0.0.4) - 2026-02-08
+- バージョン表示フォーマットをorm-discovery-mcp-goに合わせる by @usadamasa in https://github.com/usadamasa/go-template/pull/9
+
 ## [v0.0.3](https://github.com/usadamasa/go-template/compare/v0.0.2...v0.0.3) - 2026-02-08
 - バージョン表示でcommit/dateが不明な場合に括弧を省略 by @usadamasa in https://github.com/usadamasa/go-template/pull/7
 
