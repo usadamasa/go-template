@@ -2,8 +2,56 @@ package version
 
 import (
 	"runtime/debug"
+	"strings"
 	"testing"
 )
+
+func TestDisplayString(t *testing.T) {
+	tests := []struct {
+		name string
+		info Info
+		want string
+	}{
+		{
+			name: "all fields set",
+			info: Info{Version: "v1.2.3", Commit: "abc1234", Date: "2024-01-01T00:00:00Z"},
+			want: "v1.2.3 (2024-01-01T00:00:00Z, abc1234)",
+		},
+		{
+			name: "default commit and date",
+			info: Info{Version: "v0.0.2", Commit: "none", Date: "unknown"},
+			want: "v0.0.2",
+		},
+		{
+			name: "only commit available",
+			info: Info{Version: "v0.0.2", Commit: "abc1234", Date: "unknown"},
+			want: "v0.0.2 (abc1234)",
+		},
+		{
+			name: "only date available",
+			info: Info{Version: "v0.0.2", Commit: "none", Date: "2024-01-01T00:00:00Z"},
+			want: "v0.0.2 (2024-01-01T00:00:00Z)",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.info.DisplayString()
+			if got != tt.want {
+				t.Errorf("DisplayString() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDisplayString_NoParentheses(t *testing.T) {
+	// go install経由の場合、括弧が表示されないことを確認
+	info := Info{Version: "v0.0.2", Commit: "none", Date: "unknown"}
+	got := info.DisplayString()
+	if strings.Contains(got, "(") || strings.Contains(got, ")") {
+		t.Errorf("DisplayString() = %q, should not contain parentheses", got)
+	}
+}
 
 func TestResolve_LdflagsSet(t *testing.T) {
 	// ldflagsで設定済みの場合はそのまま返す
