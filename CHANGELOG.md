@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.5](https://github.com/usadamasa/go-template/compare/v0.0.4...v0.0.5) - 2026-09-06
+
+- chore(tagpr): App ID をワークフローに直書きして repository variable を不要にする by @usadamasa in https://github.com/usadamasa/go-template/pull/11
+
 ## [v0.0.4](https://github.com/usadamasa/go-template/compare/v0.0.3...v0.0.4) - 2026-02-08
 - バージョン表示フォーマットをorm-discovery-mcp-goに合わせる by @usadamasa in https://github.com/usadamasa/go-template/pull/9
 
