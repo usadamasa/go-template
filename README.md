@@ -67,31 +67,27 @@ task clean
 
 ### 必要な GitHub リポジトリ設定
 
-tagpr と GoReleaser が動作するために以下の Variables / Secrets の設定が必要:
+tagpr と GoReleaser が動作するために以下の Secret の設定が必要:
 
 | 種類 | 名前 | 説明 |
 |---|---|---|
-| Variable | `TAGPR_APP_ID` | tagpr 用 GitHub App の App ID |
 | Secret | `TAGPR_PRIVATE_KEY` | tagpr 用 GitHub App の Private Key |
 
-`GITHUB_TOKEN` は GitHub Actions が自動的に提供するため設定不要｡
+App ID は秘密情報ではないため `tagpr.yaml` に直接書いてあり､リポジトリごとの
+Variable 設定は不要｡`GITHUB_TOKEN` は GitHub Actions が自動的に提供するため設定不要｡
 
 ### セットアップ手順
 
-1. [GitHub App を作成](https://docs.github.com/en/apps/creating-github-apps) し､以下の権限を付与:
-   - Contents: Read & Write
-   - Pull Requests: Read & Write
-   - Issues: Read
-2. 作成した App をリポジトリにインストール
-3. 以下のコマンドで Variables / Secrets を設定:
+1. GitHub App `usadamasa-tagpr` をこのリポジトリにインストールする
+   (<https://github.com/settings/installations/101558454>)
+2. Private Key を Secret として設定する:
 
 ```bash
-# App ID を Variable として設定
-gh variable set TAGPR_APP_ID --body "<YOUR_APP_ID>"
-
-# Private Key を Secret として設定
-gh secret set TAGPR_PRIVATE_KEY < /path/to/private-key.pem
+gh secret set TAGPR_PRIVATE_KEY -R <owner>/<repo> < /path/to/private-key.pem
 ```
+
+App を新しく作り直す場合に必要な権限は Contents: Read & Write､
+Pull Requests: Read & Write､Issues: Read の 3 つ｡
 
 ## Template Customization
 
