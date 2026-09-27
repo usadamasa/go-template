@@ -1,0 +1,36 @@
+# パッケージ依存方向ルール (go-arch-metrics plugin の setup skill に基づく)｡
+# この設定自体の健全性は `analyze-arch-lint --metrics` と `task arch-lint` で見る｡
+#
+# component はパッケージ単位ではなく役割単位で切る:
+#   cli             エントリポイント (ルートの main と cmd/)｡Cobra を使ってよい唯一の場所
+#   shared_internal 共有 internal｡標準ライブラリ以外に依存しない (deps に entry を置かないことで表現する)
+#
+# internal にパッケージを足しても、この設定は変わらないのが狙い｡
+# ツール専用の internal (cmd/<tool>/internal) が生まれたら cmd_internal を切ること
+# (go-arch-metrics:remediate の arch-lint-remediation.md)｡
+version: 3
+
+workdir: .
+
+excludeFiles:
+  - ".*_test\\.go$"
+
+vendors:
+  cobra:
+    in: github.com/spf13/cobra
+
+components:
+  cli:
+    in:
+      - .
+      - cmd
+  shared_internal:
+    in: internal/**
+
+deps:
+  cli:
+    mayDependOn:
+      - cli  # go-arch-lint は同一 component 内の import (main → cmd) も検査する
+      - shared_internal
+    canUse:
+      - cobra

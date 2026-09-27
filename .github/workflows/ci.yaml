@@ -4,6 +4,14 @@ name: CI
   pull_request:
   merge_group:
 
+permissions:
+  contents: read
+
+env:
+  # spm-go と analyze-* は aqua のローカルレジストリ (aqua/registry.yaml) から入る｡
+  # ローカルレジストリの解決には policy が要り、`aqua install` を呼ぶ全ジョブに効かせる｡
+  AQUA_POLICY_CONFIG: ${{ github.workspace }}/aqua/policy.yaml
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -16,6 +24,8 @@ jobs:
     needs:
       - test
       - lint
+      - arch-lint
+      - pinact
     steps:
       - run: exit 1
 
@@ -25,13 +35,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Aqua
-        uses: ./.github/actions/setup-aqua
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
         with:
           go-version-file: go.mod
 
@@ -39,9 +46,9 @@ jobs:
         run: go test ./... -v -race -coverprofile=coverage.out
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5  # v7.1.1
         with:
-          file: ./coverage.out
+          files: ./coverage.out
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -52,15 +59,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      # govulncheck や goimports は aqua が go install でビルドするため、
+      # Go を Aqua より先にセットアップして go.mod が要求するバージョンでビルドされるようにする｡
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        with:
+          go-version-file: go.mod
 
       - name: Setup Aqua
         uses: ./.github/actions/setup-aqua
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
 
       - name: Format code
         run: |
@@ -73,3 +82,44 @@ jobs:
 
       - name: Run lint
         run: task lint
+
+      - name: Run security checks
+        run: task lint:sec
+
+  arch-lint:
+    name: Architecture Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      # go-arch-lint は内部で `go list` を使い、spm-go / analyze-* は go install でビルドされる｡
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Setup Aqua
+        uses: ./.github/actions/setup-aqua
+
+      - name: Run architecture lint
+        run: task arch-lint
+
+  pinact:
+    name: Pinact Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Setup Aqua
+        uses: ./.github/actions/setup-aqua
+        with:
+          packages: 'go-task/task suzuki-shunsuke/pinact'
+
+      - name: Verify pinned actions
+        run: task pinact:verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -20,9 +20,10 @@ go-template --help
 
 ### Prerequisites
 
-- [Go](https://golang.org/) 1.24+
+- [Go](https://golang.org/) 1.27+
 - [aqua](https://aquaproj.github.io/) for tool management
 - [direnv](https://direnv.net/) (optional, recommended)
+- [yamllint](https://yamllint.readthedocs.io/) (`brew install yamllint` / `pip install yamllint`)
 
 ### Setup
 
@@ -34,6 +35,10 @@ aqua install
 direnv allow
 ```
 
+`spm-go` と `analyze-*` は aqua のローカルレジストリ (`aqua/registry.yaml`) から入るため､
+解決には `AQUA_POLICY_CONFIG=aqua/policy.yaml` が要る｡`.envrc`､Taskfile､CI が渡すので､
+直接叩くときだけ自分で export する｡
+
 ### Commands
 
 ```bash
@@ -43,18 +48,41 @@ task build
 # Run tests
 task test
 
-# Run linters
+# Run linters (yamllint, golangci-lint)
 task lint
+
+# Security checks (govulncheck, gosec)
+task lint:sec
+
+# Architecture lint (go-arch-lint, analyze-arch-lint, analyze-modularity)
+task arch-lint
+
+# Pin / verify GitHub Actions SHAs (pinact)
+task pinact
+task pinact:verify
 
 # Format code
 task format
 
-# Full CI check (format, lint, test, build)
+# Full CI check
 task ci
 
 # Clean build artifacts
 task clean
 ```
+
+### Architecture Metrics
+
+lint 構成は Claude Code plugin [go-arch-metrics](https://github.com/usadamasa/go-arch-metrics) の
+`setup` skill に沿っている｡
+
+| ファイル | 役割 |
+|---|---|
+| `.golangci.yml` | 認知的複雑度・循環複雑度・関数長・ネスト深さ・保守性指数のしきい値 |
+| `.go-arch-lint.yml` | パッケージ依存方向 (役割単位の component: `cli` → `shared_internal`) |
+| `aqua/registry.yaml` | 標準レジストリに無い `spm-go` / `analyze-modularity` / `analyze-arch-lint` |
+
+ベースライン測定は `go-arch-metrics:measure`､数値の解釈は `go-arch-metrics:evaluate` を使う｡
 
 ## CI/CD Setup
 
@@ -62,8 +90,10 @@ task clean
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| CI (`ci.yaml`) | PR, merge group | テスト､リント |
+| CI (`ci.yaml`) | PR, merge group | テスト､リント (+ セキュリティ)､アーキテクチャリント､pinact 検証 |
 | tagpr (`tagpr.yaml`) | main push | リリースPR作成､タグ付け､GoReleaser でリリース |
+
+GitHub Actions は pinact でコミット SHA に固定してある｡更新は `task pinact` (7 日の min-age 付き)｡
 
 ### 必要な GitHub リポジトリ設定
 
@@ -107,6 +137,7 @@ Files to update:
 - `cmd/root.go` - command name and descriptions
 - `Taskfile.yaml` - BINARY_NAME variable
 - `.goreleaser.yaml` - project_name and build id
+- `.go-arch-lint.yml` - vendors (add third-party packages as you introduce them)
 - `LICENSE` - year and owner
 - `README.md` - this file
 
