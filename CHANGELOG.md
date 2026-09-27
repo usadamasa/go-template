@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.6](https://github.com/usadamasa/go-template/compare/v0.0.5...v0.0.6) - 2026-09-27
+
+- chore: ツールチェーンを更新し go-arch-metrics と pinact を組み込む by @usadamasa in https://github.com/usadamasa/go-template/pull/13
+
 ## [v0.0.5](https://github.com/usadamasa/go-template/compare/v0.0.4...v0.0.5) - 2026-09-06
 
 - chore(tagpr): App ID をワークフローに直書きして repository variable を不要にする by @usadamasa in https://github.com/usadamasa/go-template/pull/11
