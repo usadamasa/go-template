@@ -5,24 +5,37 @@ inputs:
   aqua_version:
     description: 'Version of Aqua to install'
     required: false
-    default: 'v2.25.0'
+    default: 'v2.63.0'
+  packages:
+    description: >-
+      Space-separated list of packages to install (e.g. "go-task/task suzuki-shunsuke/pinact").
+      Empty means install all packages in aqua.yaml.
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
   steps:
     - name: Install Aqua
-      uses: aquaproj/aqua-installer@v2.3.0
+      uses: aquaproj/aqua-installer@96a9bc20066c5bf5e275b41019cfc165b25f4e2e  # v4.0.5
       with:
         aqua_version: ${{ inputs.aqua_version }}
+        enable_aqua_install: 'false'
 
     - name: Cache Aqua tools
-      uses: actions/cache@v4
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
       with:
         path: ~/.local/share/aquaproj-aqua
-        key: ${{ runner.os }}-aqua-${{ hashFiles('aqua.yaml') }}-${{ hashFiles('aqua-checksums.json') }}
+        # go_install 系のパッケージ (govulncheck, goimports, spm-go, analyze-*) は Go でビルドされるため、
+        # go.mod (go directive) もキーに含める｡
+        key: ${{ runner.os }}-aqua-${{ inputs.aqua_version }}-${{ hashFiles('aqua.yaml', 'aqua/registry.yaml', 'go.mod') }}
         restore-keys: |
-          ${{ runner.os }}-aqua-
+          ${{ runner.os }}-aqua-${{ inputs.aqua_version }}-
 
     - name: Install tools with Aqua
-      run: aqua install
+      env:
+        AQUA_PACKAGES: ${{ inputs.packages }}
+      # Word splitting is intentional: AQUA_PACKAGES is a space-separated list of package names.
+      # shellcheck disable=SC2086
+      run: aqua install ${AQUA_PACKAGES}
       shell: bash

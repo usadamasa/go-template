@@ -5,6 +5,9 @@ version: '3'
 vars:
   BINARY_NAME: go-template
   MAIN_PKG: .
+  # analyze-* は aqua のローカルレジストリから入るため、解決に policy が要る｡
+  # 全体の env に置かないのは、無関係なタスクまで policy の読み込みに巻き込まないため｡
+  AQUA_POLICY: '{{.TASKFILE_DIR}}/aqua/policy.yaml'
 
 tasks:
   default:
@@ -39,10 +42,44 @@ tasks:
       - go test -race -cover ./...
 
   lint:
-    desc: Run linters
+    desc: Run linters (yamllint, golangci-lint)
     cmds:
       - yamllint -c .yamllint.yaml .
       - golangci-lint run
+
+  lint:sec:
+    desc: Run security checks (govulncheck, gosec)
+    cmds:
+      - govulncheck ./...
+      - gosec -quiet ./...
+
+  arch-lint:
+    desc: Check package dependency direction and the health of the arch-lint config itself
+    env:
+      AQUA_POLICY_CONFIG: '{{.AQUA_POLICY}}'
+    cmds:
+      - go-arch-lint check
+      # go-arch-lint はコードが設定に違反していないかしか見ない｡設定そのものが
+      # パッケージツリーの転記へ劣化していく方向はこちらが止める｡指標の意味と対処は
+      # analyze-arch-lint --metrics｡
+      - analyze-arch-lint --strict .
+      - analyze-modularity --strict .
+
+  pinact:
+    desc: Pin GitHub Actions to commit SHAs (and update them)
+    env:
+      GITHUB_TOKEN:
+        sh: 'echo "${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || echo "")}"'
+    cmds:
+      - pinact run -u --min-age 7
+
+  pinact:verify:
+    desc: Verify GitHub Actions are pinned and version comments match
+    env:
+      GITHUB_TOKEN:
+        sh: 'echo "${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || echo "")}"'
+    cmds:
+      - pinact run --check --verify
 
   format:
     desc: Format code
@@ -59,10 +96,13 @@ tasks:
       - task: test
 
   ci:
-    desc: Run full CI checks (format, lint, test, build)
+    desc: Run full CI checks (format, lint, lint:sec, arch-lint, pinact:verify, test, build)
     cmds:
       - task: format
       - task: lint
+      - task: lint:sec
+      - task: arch-lint
+      - task: pinact:verify
       - task: test
       - task: build
 

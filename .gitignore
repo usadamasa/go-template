@@ -35,3 +35,10 @@ Thumbs.db
 
 # Debug
 __debug_bin*
+
+# Claude Code の作業領域
+PLAN.md
+tmp/
+
+# go-arch-lint graph
+go-arch-lint-graph.svg

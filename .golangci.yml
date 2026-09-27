@@ -1,13 +1,21 @@
+# golangci-lint v2 設定｡
+# メトリクス系 linter は go-arch-metrics plugin の setup skill (references/golangci-config.md) に基づく｡
+# しきい値の根拠は go-arch-metrics:evaluate｡新規プロジェクトなので推奨値をそのまま置く｡
 version: "2"
 
 linters:
+  default: standard
   enable:
-    - forbidigo
-    - govet
-    - errcheck
-    - staticcheck
-    - ineffassign
-    - unused
+    # --- プロジェクト規約 ---
+    - forbidigo   # fmt.Print* を禁止し internal/log に寄せる
+    # --- テスト可能性メトリクス ---
+    - gocognit    # 認知的複雑度
+    - gocyclo     # 循環複雑度 (McCabe)
+    - cyclop      # 循環複雑度 (パッケージ全体も対象)
+    - funlen      # 関数の長さ
+    - nestif      # ネストの深さ
+    # --- 保守性メトリクス ---
+    - maintidx    # 保守性指数
 
   settings:
     forbidigo:
@@ -19,14 +27,42 @@ linters:
       analyze-types: true
       exclude-godoc-examples: true
 
+    gocognit:
+      min-complexity: 20
+
+    gocyclo:
+      min-complexity: 20
+
+    cyclop:
+      max-complexity: 20
+
+    funlen:
+      lines: 100
+      statements: 60
+
+    nestif:
+      min-complexity: 5
+
+    maintidx:
+      under: 20
+
   exclusions:
     paths:
       - vendor
+      # 生成コードは全チェックを除外
+      - ".*\\.pb\\.go$"
+      - ".*_gen\\.go$"
     rules:
-      # Allow in test files
+      # テーブル駆動テストは複雑度・長さ・保守性指数がどうしても悪化する
       - path: _test\.go
         linters:
+          - cyclop
           - forbidigo
+          - funlen
+          - gocognit
+          - gocyclo
+          - maintidx
+          - nestif
       # Allow in main.go (CLI entry point)
       - path: main\.go
         linters:

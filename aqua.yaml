@@ -5,11 +5,31 @@
 
 registries:
   - type: standard
-    ref: v4.448.1  # renovate: depName=aquaproj/aqua-registry
+    ref: v4.567.0 # renovate: depName=aquaproj/aqua-registry
+  # 標準レジストリに存在しないパッケージ用｡定義は aqua/registry.yaml｡
+  # ローカルレジストリの解決には AQUA_POLICY_CONFIG=aqua/policy.yaml が要る
+  # (.envrc・Taskfile・CI が渡す｡直接叩くときは自分で export する)｡
+  - name: local
+    type: local
+    path: aqua/registry.yaml
 
 packages:
-  - name: go-task/task@v3.46.4
-  - name: golangci/golangci-lint@v2.7.2
-  - name: golang/tools/goimports@v0.34.0
-  - name: goreleaser/goreleaser@v2.13.2
-  - name: Songmu/tagpr@v1.5.0
+  - name: go-task/task@v3.53.1
+  - name: golangci/golangci-lint@v2.14.0
+  - name: golang/tools/goimports@v0.50.0
+  - name: goreleaser/goreleaser@v2.18.2
+  - name: Songmu/tagpr@v1.21.0
+  - name: suzuki-shunsuke/pinact@v5.0.0
+  # --- アーキテクチャメトリクス (go-arch-metrics plugin の setup skill が要求するツール) ---
+  - name: fe3dback/go-arch-lint@v1.19.0
+  - name: golang/vuln/govulncheck@v1.8.0
+  - name: securego/gosec@v2.29.0
+  # go-arch-metrics:measure の baseline.sh が PATH に要求する｡ただし spm-go v0.11.1 は
+  # golang.org/x/tools v0.1.0 に依存しており、Go 1.27 の export data を読めずパッケージを 0 件と報告する
+  # (https://github.com/usadamasa/go-arch-metrics/issues/14)｡
+  - name: fdaines/spm-go@v0.11.1
+    registry: local
+  - name: usadamasa/go-arch-metrics/analyze-modularity@2026.0927.0
+    registry: local
+  - name: usadamasa/go-arch-metrics/analyze-arch-lint@2026.0927.0
+    registry: local
