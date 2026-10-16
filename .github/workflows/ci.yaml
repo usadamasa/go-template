@@ -1,5 +1,3 @@
-# This workflow is managed by gh actions-lock.
-
 name: CI
 
 "on":
@@ -20,7 +18,7 @@ concurrency:
 
 jobs:
   ci-status-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: always()
     timeout-minutes: 10
     needs:
@@ -120,7 +118,7 @@ jobs:
       - name: Install gh-actions-lock
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh extension install github/gh-actions-lock --pin v0.1.6
+        run: gh extension install github/gh-actions-lock --pin v0.2.0
 
       - name: Verify actions are locked
         env:
