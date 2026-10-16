@@ -57,10 +57,6 @@ task lint:sec
 # Architecture lint (go-arch-lint, analyze-arch-lint, analyze-modularity)
 task arch-lint
 
-# Pin / verify GitHub Actions SHAs (pinact)
-task pinact
-task pinact:verify
-
 # Format code
 task format
 
@@ -90,10 +86,11 @@ lint 構成は Claude Code plugin [go-arch-metrics](https://github.com/usadamasa
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| CI (`ci.yaml`) | PR, merge group | テスト､リント (+ セキュリティ)､アーキテクチャリント､pinact 検証 |
+| CI (`ci.yaml`) | PR, merge group | テスト､リント (+ セキュリティ)､アーキテクチャリント､actions-lock 検証 |
 | tagpr (`tagpr.yaml`) | main push | リリースPR作成､タグ付け､GoReleaser でリリース |
 
-GitHub Actions は pinact でコミット SHA に固定してある｡更新は `task pinact` (7 日の min-age 付き)｡
+GitHub Actions は `uses:` にタグを書き、対応するコミット SHA を `.github/workflows/actions.lock` に記録している｡
+バージョンを上げるときは `uses:` のタグを書き換えて `gh actions-lock` を実行し、workflow と lockfile を同じコミットに入れる｡
 
 ### 必要な GitHub リポジトリ設定
 

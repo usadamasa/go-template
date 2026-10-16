@@ -23,11 +23,9 @@ task test           # Run tests with race detection
 task lint           # Run yamllint and golangci-lint
 task lint:sec       # Run govulncheck and gosec
 task arch-lint      # go-arch-lint + analyze-arch-lint + analyze-modularity
-task pinact         # Pin GitHub Actions to commit SHAs
-task pinact:verify  # Verify pinned actions
 task format         # Format code (go mod tidy, goimports, go fmt)
 task dev            # format + lint + test
-task ci             # format + lint + lint:sec + arch-lint + pinact:verify + test + build
+task ci             # format + lint + lint:sec + arch-lint + test + build
 task clean          # Remove build artifacts
 ```
 
@@ -82,10 +80,11 @@ The lint setup follows the `go-arch-metrics` plugin
 
 ## CI/CD
 
-- **CI Workflow**: Runs on PRs - test, lint (+ security), architecture lint, pinact verify
+- **CI Workflow**: Runs on PRs - test, lint (+ security), architecture lint, actions-lock verify
 - **TagPR Workflow**: Runs on main push - creates release PRs and GitHub releases
 - Uses aqua for tool version management
-- GitHub Actions are pinned to commit SHAs by pinact (`task pinact` to update)
+- GitHub Actions are written as tags in `uses:` and locked to commit SHAs in `.github/workflows/actions.lock`
+  by `gh actions-lock` (run it after changing a version, and commit the lockfile with the workflow)
 - GoReleaser for cross-platform builds
 
 ## Template Placeholders

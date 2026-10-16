@@ -1,3 +1,5 @@
+# This workflow is managed by gh actions-lock.
+
 name: CI
 
 "on":
@@ -19,15 +21,16 @@ concurrency:
 jobs:
   ci-status-check:
     runs-on: ubuntu-latest
-    if: failure()
+    if: always()
     timeout-minutes: 10
     needs:
       - test
       - lint
       - arch-lint
-      - pinact
+      - actions-lock
     steps:
-      - run: exit 1
+      - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
 
   test:
     name: Test
@@ -35,10 +38,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Setup Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
 
@@ -46,7 +49,7 @@ jobs:
         run: go test ./... -v -race -coverprofile=coverage.out
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5  # v7.1.1
+        uses: codecov/codecov-action@v7.1.1
         with:
           files: ./coverage.out
           flags: unittests
@@ -59,17 +62,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       # govulncheck や goimports は aqua が go install でビルドするため、
       # Go を Aqua より先にセットアップして go.mod が要求するバージョンでビルドされるようにする｡
       - name: Setup Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
 
       - name: Setup Aqua
-        uses: ./.github/actions/setup-aqua
+        uses: $/.github/actions/setup-aqua
 
       - name: Format code
         run: |
@@ -92,34 +95,34 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        uses: actions/checkout@v7.0.1
 
       # go-arch-lint は内部で `go list` を使い、spm-go / analyze-* は go install でビルドされる｡
       - name: Setup Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
 
       - name: Setup Aqua
-        uses: ./.github/actions/setup-aqua
+        uses: $/.github/actions/setup-aqua
 
       - name: Run architecture lint
         run: task arch-lint
 
-  pinact:
-    name: Pinact Verify
+  actions-lock:
+    name: Actions Lock Verify
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        uses: actions/checkout@v7.0.1
 
-      - name: Setup Aqua
-        uses: ./.github/actions/setup-aqua
-        with:
-          packages: 'go-task/task suzuki-shunsuke/pinact'
-
-      - name: Verify pinned actions
-        run: task pinact:verify
+      - name: Install gh-actions-lock
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: gh extension install github/gh-actions-lock --pin v0.1.6
+
+      - name: Verify actions are locked
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh actions-lock --verify
