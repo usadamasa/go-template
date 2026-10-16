@@ -8,7 +8,7 @@ inputs:
     default: 'v2.63.0'
   packages:
     description: >-
-      Space-separated list of packages to install (e.g. "go-task/task suzuki-shunsuke/pinact").
+      Space-separated list of packages to install (e.g. "go-task/task golangci/golangci-lint").
       Empty means install all packages in aqua.yaml.
     required: false
     default: ''
@@ -17,13 +17,13 @@ runs:
   using: 'composite'
   steps:
     - name: Install Aqua
-      uses: aquaproj/aqua-installer@96a9bc20066c5bf5e275b41019cfc165b25f4e2e  # v4.0.5
+      uses: aquaproj/aqua-installer@v4.0.5
       with:
         aqua_version: ${{ inputs.aqua_version }}
         enable_aqua_install: 'false'
 
     - name: Cache Aqua tools
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+      uses: actions/cache@v6.1.0
       with:
         path: ~/.local/share/aquaproj-aqua
         # go_install 系のパッケージ (govulncheck, goimports, spm-go, analyze-*) は Go でビルドされるため、

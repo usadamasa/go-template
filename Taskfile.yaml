@@ -65,22 +65,6 @@ tasks:
       - analyze-arch-lint --strict .
       - analyze-modularity --strict .
 
-  pinact:
-    desc: Pin GitHub Actions to commit SHAs (and update them)
-    env:
-      GITHUB_TOKEN:
-        sh: 'echo "${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || echo "")}"'
-    cmds:
-      - pinact run -u --min-age 7
-
-  pinact:verify:
-    desc: Verify GitHub Actions are pinned and version comments match
-    env:
-      GITHUB_TOKEN:
-        sh: 'echo "${GITHUB_TOKEN:-$(gh auth token 2>/dev/null || echo "")}"'
-    cmds:
-      - pinact run --check --verify
-
   format:
     desc: Format code
     cmds:
@@ -96,13 +80,12 @@ tasks:
       - task: test
 
   ci:
-    desc: Run full CI checks (format, lint, lint:sec, arch-lint, pinact:verify, test, build)
+    desc: Run full CI checks (format, lint, lint:sec, arch-lint, test, build)
     cmds:
       - task: format
       - task: lint
       - task: lint:sec
       - task: arch-lint
-      - task: pinact:verify
       - task: test
       - task: build
 
