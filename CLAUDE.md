@@ -29,8 +29,8 @@ task ci             # format + lint + lint:sec + arch-lint + test + build
 task clean          # Remove build artifacts
 ```
 
-Go and the development tools come from the Nix devShell in `flake.nix` (loaded by nix-direnv via `.envrc`,
-or `nix develop`). `analyze-*` are not in nixpkgs, so `flake.nix` builds them from a go-arch-metrics tag.
+Go and the development tools come from the Nix devShell in `flake.nix` (loaded by nix-direnv via `.envrc`).
+`analyze-*` are not in nixpkgs, so `flake.nix` builds them from a go-arch-metrics tag.
 Bump tool versions with `nix flake update`.
 
 ## Code Guidelines
