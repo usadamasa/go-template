@@ -37,18 +37,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-      - name: Set up Go
-        uses: actions/setup-go@v7.0.0
+      # Go と goreleaser は flake.nix の devShell から取る。版の正本は flake.lock。
+      - name: Setup Nix devShell
+        uses: $/.github/actions/setup-nix
         if: steps.tagpr.outputs.tag != ''
-        with:
-          go-version-file: go.mod
 
       - name: Release
-        uses: goreleaser/goreleaser-action@v7.2.3
         if: steps.tagpr.outputs.tag != ''
-        with:
-          distribution: goreleaser
-          version: "~> v2"
-          args: release --clean
+        run: goreleaser release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
