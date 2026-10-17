@@ -20,24 +20,26 @@ go-template --help
 
 ### Prerequisites
 
-- [Go](https://golang.org/) 1.27+
-- [aqua](https://aquaproj.github.io/) for tool management
-- [direnv](https://direnv.net/) (optional, recommended)
-- [yamllint](https://yamllint.readthedocs.io/) (`brew install yamllint` / `pip install yamllint`)
+- [Nix](https://nixos.org/) with flakes enabled
+- [direnv](https://direnv.net/) + [nix-direnv](https://github.com/nix-community/nix-direnv) (optional, recommended)
 
 ### Setup
 
 ```bash
-# Install development tools
-aqua install
-
-# Allow direnv (if using direnv)
+# Load the devShell via nix-direnv
 direnv allow
+
+# Or enter it without direnv
+nix develop
 ```
 
-`spm-go` と `analyze-*` は aqua のローカルレジストリ (`aqua/registry.yaml`) から入るため､
-解決には `AQUA_POLICY_CONFIG=aqua/policy.yaml` が要る｡`.envrc`､Taskfile､CI が渡すので､
-直接叩くときだけ自分で export する｡
+Go と開発ツール (go-task、goimports、golangci-lint、gosec、govulncheck、go-arch-lint、
+analyze-modularity / analyze-arch-lint、goreleaser、yamllint) は `flake.nix` の devShell で揃える。
+版は `flake.lock` が固定する nixpkgs で決まり、CI も同じ flake を使う。
+nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタグからビルドする。
+
+`go.mod` の `go` ディレクティブは devShell の `go_1_27` と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
+ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する。
 
 ### Commands
 
@@ -76,7 +78,7 @@ lint 構成は Claude Code plugin [go-arch-metrics](https://github.com/usadamasa
 |---|---|
 | `.golangci.yml` | 認知的複雑度・循環複雑度・関数長・ネスト深さ・保守性指数のしきい値 |
 | `.go-arch-lint.yml` | パッケージ依存方向 (役割単位の component: `cli` → `shared_internal`) |
-| `aqua/registry.yaml` | 標準レジストリに無い `spm-go` / `analyze-modularity` / `analyze-arch-lint` |
+| `flake.nix` | nixpkgs に無い `analyze-modularity` / `analyze-arch-lint` を go-arch-metrics のタグからビルド |
 
 ベースライン測定は `go-arch-metrics:measure`､数値の解釈は `go-arch-metrics:evaluate` を使う｡
 

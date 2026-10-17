@@ -5,9 +5,6 @@ version: '3'
 vars:
   BINARY_NAME: go-template
   MAIN_PKG: .
-  # analyze-* は aqua のローカルレジストリから入るため、解決に policy が要る｡
-  # 全体の env に置かないのは、無関係なタスクまで policy の読み込みに巻き込まないため｡
-  AQUA_POLICY: '{{.TASKFILE_DIR}}/aqua/policy.yaml'
 
 tasks:
   default:
@@ -55,8 +52,6 @@ tasks:
 
   arch-lint:
     desc: Check package dependency direction and the health of the arch-lint config itself
-    env:
-      AQUA_POLICY_CONFIG: '{{.AQUA_POLICY}}'
     cmds:
       - go-arch-lint check
       # go-arch-lint はコードが設定に違反していないかしか見ない｡設定そのものが

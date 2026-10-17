@@ -10,7 +10,7 @@ This is a Go project template with a comprehensive development setup.
 ├── internal/      # Private application code
 │   ├── log/       # Logging package (forbidigo-compliant)
 │   └── version/   # Version resolution (ldflags / runtime/debug)
-├── aqua/          # Local aqua registry + policy for tools missing from the standard registry
+├── flake.nix      # Nix devShell (Go and development tools), versions locked by flake.lock
 ├── main.go        # Application entry point
 └── Taskfile.yaml  # Task runner configuration
 ```
@@ -29,9 +29,9 @@ task ci             # format + lint + lint:sec + arch-lint + test + build
 task clean          # Remove build artifacts
 ```
 
-Tools are managed by aqua (`aqua.yaml`). `spm-go` and `analyze-*` come from the local registry
-(`aqua/registry.yaml`), which requires `AQUA_POLICY_CONFIG=aqua/policy.yaml`. `.envrc`, the Taskfile,
-and CI set it; export it yourself when calling those tools directly.
+Go and the development tools come from the Nix devShell in `flake.nix` (loaded by nix-direnv via `.envrc`,
+or `nix develop`). `analyze-*` are not in nixpkgs, so `flake.nix` builds them from a go-arch-metrics tag.
+Bump tool versions with `nix flake update`.
 
 ## Code Guidelines
 
@@ -82,7 +82,7 @@ The lint setup follows the `go-arch-metrics` plugin
 
 - **CI Workflow**: Runs on PRs - test, lint (+ security), architecture lint, actions-lock verify
 - **TagPR Workflow**: Runs on main push - creates release PRs and GitHub releases
-- Uses aqua for tool version management
+- Uses the Nix devShell (`flake.nix` / `flake.lock`) for tool version management, loaded in CI by `nicknovitski/nix-develop`
 - GitHub Actions are written as tags in `uses:` and locked to commit SHAs in `.github/workflows/actions.lock`
   by `gh actions-lock` (run it after changing a version, and commit the lockfile with the workflow)
 - GoReleaser for cross-platform builds

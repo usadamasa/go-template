@@ -32,6 +32,7 @@ Thumbs.db
 
 # direnv
 .envrc.local
+/.direnv/
 
 # Debug
 __debug_bin*
