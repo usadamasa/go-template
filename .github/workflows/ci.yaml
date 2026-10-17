@@ -7,15 +7,12 @@ name: CI
 permissions:
   contents: read
 
-env:
-  # spm-go と analyze-* は aqua のローカルレジストリ (aqua/registry.yaml) から入る｡
-  # ローカルレジストリの解決には policy が要り、`aqua install` を呼ぶ全ジョブに効かせる｡
-  AQUA_POLICY_CONFIG: ${{ github.workspace }}/aqua/policy.yaml
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Go と lint のツールは flake.nix の devShell から取る｡版の正本は flake.lock｡
+# nix-develop が devShell の PATH と env を GITHUB_PATH / GITHUB_ENV に書くので、以後の step は素で動く｡
 jobs:
   ci-status-check:
     runs-on: ubuntu-slim
@@ -38,10 +35,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
 
-      - name: Setup Go
-        uses: actions/setup-go@v7.0.0
-        with:
-          go-version-file: go.mod
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v23
+
+      - name: Load devShell
+        uses: nicknovitski/nix-develop@v1.2.1
 
       - name: Run tests
         run: go test ./... -v -race -coverprofile=coverage.out
@@ -62,15 +60,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
 
-      # govulncheck や goimports は aqua が go install でビルドするため、
-      # Go を Aqua より先にセットアップして go.mod が要求するバージョンでビルドされるようにする｡
-      - name: Setup Go
-        uses: actions/setup-go@v7.0.0
-        with:
-          go-version-file: go.mod
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v23
 
-      - name: Setup Aqua
-        uses: $/.github/actions/setup-aqua
+      - name: Load devShell
+        uses: nicknovitski/nix-develop@v1.2.1
 
       - name: Format code
         run: |
@@ -95,14 +89,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
 
-      # go-arch-lint は内部で `go list` を使い、spm-go / analyze-* は go install でビルドされる｡
-      - name: Setup Go
-        uses: actions/setup-go@v7.0.0
-        with:
-          go-version-file: go.mod
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v23
 
-      - name: Setup Aqua
-        uses: $/.github/actions/setup-aqua
+      - name: Load devShell
+        uses: nicknovitski/nix-develop@v1.2.1
 
       - name: Run architecture lint
         run: task arch-lint
