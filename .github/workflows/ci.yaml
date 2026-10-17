@@ -11,7 +11,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Go と lint のツールは flake.nix の devShell から取る｡版の正本は flake.lock｡
+# Go と lint のツールは flake.nix の devShell から取る。版の正本は flake.lock。
 # nix-develop が devShell の PATH と env を GITHUB_PATH / GITHUB_ENV に書くので、以後の step は素で動く｡
 jobs:
   ci-status-check:

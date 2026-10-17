@@ -33,13 +33,13 @@ direnv allow
 nix develop
 ```
 
-Go と開発ツール (go-task､goimports､golangci-lint､gosec､govulncheck､go-arch-lint､
-analyze-modularity / analyze-arch-lint､goreleaser､yamllint) は `flake.nix` の devShell で揃える｡
-版は `flake.lock` が固定する nixpkgs で決まり､CI も同じ flake を使う｡
-nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタグからビルドする｡
+Go と開発ツール (go-task、goimports、golangci-lint、gosec、govulncheck、go-arch-lint、
+analyze-modularity / analyze-arch-lint、goreleaser、yamllint) は `flake.nix` の devShell で揃える。
+版は `flake.lock` が固定する nixpkgs で決まり、CI も同じ flake を使う。
+nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタグからビルドする。
 
-`go.mod` の `go` ディレクティブは devShell の `go_1_27` と揃え､`GOTOOLCHAIN=local` でずれたら失敗させる｡
-ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する｡
+`go.mod` の `go` ディレクティブは devShell の `go_1_27` と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
+ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する。
 
 ### Commands
 
