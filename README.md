@@ -21,16 +21,13 @@ go-template --help
 ### Prerequisites
 
 - [Nix](https://nixos.org/) with flakes enabled
-- [direnv](https://direnv.net/) + [nix-direnv](https://github.com/nix-community/nix-direnv) (optional, recommended)
+- [direnv](https://direnv.net/) + [nix-direnv](https://github.com/nix-community/nix-direnv)
 
 ### Setup
 
 ```bash
 # Load the devShell via nix-direnv
 direnv allow
-
-# Or enter it without direnv
-nix develop
 ```
 
 Go と開発ツール (go-task、goimports、golangci-lint、gosec、govulncheck、go-arch-lint、
