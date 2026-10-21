@@ -86,6 +86,7 @@ The lint setup follows the `go-arch-metrics` plugin
 - GitHub Actions are written as tags in `uses:` and locked to commit SHAs in `.github/workflows/actions.lock`
   by `gh actions-lock` (run it after changing a version, and commit the lockfile with the workflow)
 - GoReleaser for cross-platform builds
+- Dependabot opens weekly PRs for `go.mod`, GitHub Actions, and `flake.lock` (see `.github/dependabot.yml`)
 
 ## Template Placeholders
 
