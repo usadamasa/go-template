@@ -37,6 +37,7 @@ nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタ�
 
 `go.mod` の `go` ディレクティブは devShell の `go_1_27` と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
 ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する。
+`flake.lock`・`go.mod`・GitHub Actions の更新は Dependabot が週次で PR を出す (`.github/dependabot.yml`)。
 
 ### Commands
 
@@ -136,6 +137,10 @@ Files to update:
 - `.go-arch-lint.yml` - vendors (add third-party packages as you introduce them)
 - `LICENSE` - year and owner
 - `README.md` - this file
+
+`.github/dependabot.yml` has no placeholders and works as is. Two things it relies on are set outside the file:
+- Dependabot security updates are a repository setting (Settings > Advanced Security). Enable them on the new repository.
+- The `nix` ecosystem updates `flake.lock` inputs only; it has no security updates.
 
 ## License
 

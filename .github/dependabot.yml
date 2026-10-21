@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # 3 つとも group は作らず、パッケージごとに PR を出させる。group の PR が開いた
+  # ままだと同じ group の更新が全部止まり、1 つの更新の不具合で他の更新まで
+  # 巻き添えになる。
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Dependabot は `uses:` のタグと actions.lock の SHA を同じ commit で上げるので、
+  # CI の actions-lock ジョブ (`gh actions-lock --verify`) を通る。
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  # devShell の Go と lint ツールの版は flake.lock の nixpkgs の rev で決まる。
+  # nix の対象は flake.lock の input の更新だけで、security updates は出ない。
+  # flake.nix の中で fetchFromGitHub している go-arch-metrics のタグは対象外。
+  - package-ecosystem: nix
+    directory: /
+    schedule:
+      interval: weekly
