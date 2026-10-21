@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.0.7](https://github.com/usadamasa/go-template/compare/v0.0.6...v0.0.7) - 2026-10-21
+
+- ci: Dependabot で gomod・github-actions・nix を週次で更新する by @usadamasa in https://github.com/usadamasa/go-template/pull/22
+- devShell の Go を 1.27.3 に上げて GO-2026-6809 を解消する by @usadamasa in https://github.com/usadamasa/go-template/pull/27
+
 ## [v0.0.6](https://github.com/usadamasa/go-template/compare/v0.0.5...v0.0.6) - 2026-10-17
 
 - chore: ツールチェーンを更新し go-arch-metrics と pinact を組み込む by @usadamasa in https://github.com/usadamasa/go-template/pull/13
