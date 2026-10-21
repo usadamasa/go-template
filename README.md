@@ -141,6 +141,7 @@ Files to update:
 `.github/dependabot.yml` has no placeholders and works as is. Two things it relies on are set outside the file:
 - Dependabot security updates are a repository setting (Settings > Advanced Security). Enable them on the new repository.
 - The `nix` ecosystem updates `flake.lock` inputs only; it has no security updates.
+- The `nix` ecosystem does not run on private repositories (as of 2026-10). For a private repository, remove the `nix` entry and update `flake.lock` with a [DeterminateSystems/update-flake-lock](https://github.com/DeterminateSystems/update-flake-lock) workflow instead.
 
 ## License
 
