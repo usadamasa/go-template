@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.0.8](https://github.com/usadamasa/go-template/compare/v0.0.7...v0.0.8) - 2026-10-22
+
+- chore(deps): Bump actions/create-github-app-token from 3.2.0 to 3.3.0 by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/25
+- chore(deps): Bump Songmu/tagpr from 1.20.3 to 1.21.3 by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/24
+- setup-nix を gh-manage の共有 action へ移行する by @usadamasa in https://github.com/usadamasa/go-template/pull/30
+
 ## [v0.0.7](https://github.com/usadamasa/go-template/compare/v0.0.6...v0.0.7) - 2026-10-21
 
 - ci: Dependabot で gomod・github-actions・nix を週次で更新する by @usadamasa in https://github.com/usadamasa/go-template/pull/22
