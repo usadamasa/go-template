@@ -38,9 +38,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
-      # Go と goreleaser は flake.nix の devShell から取る。版の正本は flake.lock。
+      # Go と goreleaser は flake.nix の devShell から取る (usadamasa/gh-manage の setup-nix)。
+      # 版の正本は flake.lock。
       - name: Setup Nix devShell
-        uses: $/.github/actions/setup-nix
+        uses: usadamasa/gh-manage/actions/setup-nix@main
         if: steps.tagpr.outputs.tag != ''
 
       - name: Release

@@ -82,7 +82,7 @@ The lint setup follows the `go-arch-metrics` plugin
 
 - **CI Workflow**: Runs on PRs - test, lint (+ security), architecture lint, actions-lock verify
 - **TagPR Workflow**: Runs on main push - creates release PRs and GitHub releases
-- Uses the Nix devShell (`flake.nix` / `flake.lock`) for tool version management, loaded in CI by `nicknovitski/nix-develop`
+- Uses the Nix devShell (`flake.nix` / `flake.lock`) for tool version management, loaded in CI by the shared `usadamasa/gh-manage/actions/setup-nix@main` action
 - GitHub Actions are written as tags in `uses:` and locked to commit SHAs in `.github/workflows/actions.lock`
   by `gh actions-lock` (run it after changing a version, and commit the lockfile with the workflow)
 - GoReleaser for cross-platform builds
