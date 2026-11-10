@@ -35,7 +35,9 @@ analyze-modularity / analyze-arch-lint、goreleaser、yamllint) は `flake.nix` 
 版は `flake.lock` が固定する nixpkgs で決まり、CI も同じ flake を使う。
 nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタグからビルドする。
 
-`go.mod` の `go` ディレクティブは devShell の `go_1_27` と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
+`go.mod` の `go` ディレクティブは devShell の Go と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
+nixpkgs の `go_1_27` がセキュリティ修正に追いつくまでは、devShell の Go だけを `flake.nix` で修正バージョンのソースへ
+差し替える。追いついたら差し替えの分岐を消す。
 ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する。
 `flake.lock`・`go.mod`・GitHub Actions の更新は Dependabot が週次で PR を出す (`.github/dependabot.yml`)。
 
