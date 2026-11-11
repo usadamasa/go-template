@@ -30,8 +30,9 @@ task clean          # Remove build artifacts
 ```
 
 Go and the development tools come from the Nix devShell in `flake.nix` (loaded by nix-direnv via `.envrc`).
-`analyze-*` are not in nixpkgs, so `flake.nix` builds them from a go-arch-metrics tag.
-Bump tool versions with `nix flake update`.
+`analyze-*` are not in nixpkgs, so `flake.nix` takes them from the go-arch-metrics flake input.
+Bump tool versions with `nix flake update`. It (and Dependabot) moves go-arch-metrics to its default branch head; to
+match a plugin release, run `nix flake lock --override-input go-arch-metrics github:usadamasa/go-arch-metrics/<tag>`.
 
 ## Code Guidelines
 

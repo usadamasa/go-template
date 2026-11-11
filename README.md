@@ -33,13 +33,16 @@ direnv allow
 Go と開発ツール (go-task、goimports、golangci-lint、gosec、govulncheck、go-arch-lint、
 analyze-modularity / analyze-arch-lint、goreleaser、yamllint) は `flake.nix` の devShell で揃える。
 版は `flake.lock` が固定する nixpkgs で決まり、CI も同じ flake を使う。
-nixpkgs に無い `analyze-*` は `flake.nix` の中で go-arch-metrics のタグからビルドする。
+nixpkgs に無い `analyze-*` は go-arch-metrics の flake を input にして入れる。
 
 `go.mod` の `go` ディレクティブは devShell の Go と揃え、`GOTOOLCHAIN=local` でずれたら失敗させる。
 nixpkgs の `go_1_27` がセキュリティ修正に追いつくまでは、devShell の Go だけを `flake.nix` で修正バージョンのソースへ
 差し替える。追いついたら差し替えの分岐を消す。
 ツールの版を上げるときは `nix flake update` で `flake.lock` を更新する。
 `flake.lock`・`go.mod`・GitHub Actions の更新は Dependabot が週次で PR を出す (`.github/dependabot.yml`)。
+`nix flake update` と Dependabot は go-arch-metrics を default branch の先頭へ動かす。plugin のリリースにそろえるときは
+`nix flake lock --override-input go-arch-metrics github:usadamasa/go-arch-metrics/<tag>` で取る
+(go-arch-metrics の setup skill の `references/tools.md`)。
 
 ### Commands
 
@@ -78,7 +81,7 @@ lint 構成は Claude Code plugin [go-arch-metrics](https://github.com/usadamasa
 |---|---|
 | `.golangci.yml` | 認知的複雑度・循環複雑度・関数長・ネスト深さ・保守性指数のしきい値 |
 | `.go-arch-lint.yml` | パッケージ依存方向 (役割単位の component: `cli` → `shared_internal`) |
-| `flake.nix` | nixpkgs に無い `analyze-modularity` / `analyze-arch-lint` を go-arch-metrics のタグからビルド |
+| `flake.nix` | nixpkgs に無い `analyze-modularity` / `analyze-arch-lint` を go-arch-metrics の flake input から入れる |
 
 ベースライン測定は `go-arch-metrics:measure`､数値の解釈は `go-arch-metrics:evaluate` を使う｡
 

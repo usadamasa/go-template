@@ -1,18 +1,24 @@
 {
   description = "Development environment (Go, lint, and CI tools)";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # tag は付け替えられるので、固定は flake.lock の commit に任せる
+    go-arch-metrics.url = "github:usadamasa/go-arch-metrics";
+    # package は nixpkgs の go_latest でビルドされる。vulncheck は自分をビルドした Go より新しい系列の
+    # go 行のモジュールを測れないので、この flake の nixpkgs に揃えて go_1_27 に追いつかせる
+    go-arch-metrics.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs =
-    { nixpkgs, ... }:
+    { nixpkgs, go-arch-metrics, ... }:
     let
       systems = [
         "aarch64-darwin"
         "aarch64-linux"
-        "x86_64-darwin"
         "x86_64-linux"
       ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system nixpkgs.legacyPackages.${system});
       # nixos-unstable の go_1_27 は 1.27.3 で、net/http の MaxBytesReader のデータ競合 (CVE-2026-97054) と
       # cgo 経由でビルド時に任意コードが実行される cmd/go などの脆弱性 (CVE-2026-97033〜97043) が残る。
       # channel の go_1_27 が 1.27.4 より古いときだけソースを差し替える。
@@ -32,42 +38,22 @@
     in
     {
       devShells = forAllSystems (
-        pkgs:
-        let
-          go = devGo pkgs;
-          # nixpkgs に無い go-arch-metrics plugin 同梱の CLI。plugin のリリースタグをそのまま使う
-          go-arch-metrics = pkgs.buildGoModule.override { inherit go; } rec {
-            pname = "go-arch-metrics";
-            version = "2026.1111.0";
-            src = pkgs.fetchFromGitHub {
-              owner = "usadamasa";
-              repo = "go-arch-metrics";
-              tag = version;
-              hash = "sha256-sygB3EdS91CX5wRWDhk7AyzdU9zU053gE0+KNOikWVw=";
-            };
-            vendorHash = "sha256-P34wsgGl4ZkID01O2yCx+CwaGWAQIxsA4zbtU2N2t58=";
-            subPackages = [
-              "cmd/analyze-modularity"
-              "cmd/analyze-arch-lint"
-            ];
-            # テストは go-arch-metrics の CI が持つ。build sandbox には git が無く、git を使うテストが落ちる
-            doCheck = false;
-          };
-        in
-        {
+        system: pkgs: {
           default = pkgs.mkShellNoCC {
             packages = with pkgs; [
               # go.mod の go ディレクティブと同じバージョン。ずれたら GOTOOLCHAIN=local で即座に失敗させる
-              go
+              (devGo pkgs)
               go-task
               gotools
+              git
               golangci-lint
               gosec
               govulncheck
               go-arch-lint
-              go-arch-metrics
               goreleaser
               yamllint
+              # analyze-modularity、analyze-arch-lint、vulncheck、arch-baseline。実行時の go・git・go-arch-lint は上の PATH から使う
+              go-arch-metrics.packages.${system}.default
             ];
             env.GOTOOLCHAIN = "local";
           };
