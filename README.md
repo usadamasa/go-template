@@ -93,6 +93,7 @@ lint 構成は Claude Code plugin [go-arch-metrics](https://github.com/usadamasa
 |---|---|---|
 | CI (`ci.yaml`) | PR, merge group | テスト､リント (+ セキュリティ)､アーキテクチャリント､actions-lock 検証 |
 | tagpr (`tagpr.yaml`) | main push | リリースPR作成､タグ付け､GoReleaser でリリース |
+| Nix cache (`nix-cache.yaml`) | main push, 週次, 手動 | PR の CI が戻す nix store のキャッシュを default branch で保存 |
 
 GitHub Actions は `uses:` にタグを書き、対応するコミット SHA を `.github/workflows/actions.lock` に記録している｡
 バージョンを上げるときは `uses:` のタグを書き換えて `gh actions-lock` を実行し、workflow と lockfile を同じコミットに入れる｡

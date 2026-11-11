@@ -7,6 +7,9 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'codecov/codecov-action@v7.1.1'
         - 'usadamasa/gh-manage@main'
+    '.github/workflows/nix-cache.yaml':
+        - 'actions/checkout@v7.0.1'
+        - 'usadamasa/gh-manage@main'
     '.github/workflows/tagpr.yaml':
         - 'actions/checkout@v7.0.1'
         - 'actions/create-github-app-token@v3.3.0'
@@ -57,7 +60,7 @@ dependencies:
         repo_id: 524603982
     'usadamasa/gh-manage@main':
         ref: 'main'
-        commit: 'sha1-70163a8e097b340d9347b51db77140e94f253249'
+        commit: 'sha1-320b95a4d83736e13c1a033a9760862881a9cb55'
         owner_id: 513226
         repo_id: 1390013800
         uses:
