@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/usadamasa/go-template/cmd"
+	"github.com/usadamasa/go-template/internal/log"
 	versionpkg "github.com/usadamasa/go-template/internal/version"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	info := versionpkg.Resolve(version, commit, date)
 	cmd.SetVersion(info.DisplayString())
 	if err := cmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Errorln(err)
 		os.Exit(1)
 	}
 }
