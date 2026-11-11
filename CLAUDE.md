@@ -42,17 +42,15 @@ Do not use `fmt.Print*` for console output. Use `internal/log` package instead:
 ```go
 import "github.com/usadamasa/go-template/internal/log"
 
-log.Println("Hello")
-log.Printf("Value: %d", 42)
 log.Errorln("Something went wrong")
-log.Errorf("failed: %v", err)
 
 // In tests, swap the writers for a buffer
-log.Out = &buf
+log.Err = &buf
 ```
 
-The API is kept to four functions plus the `Out` / `Err` writers on purpose: a larger facade trips
-the public-ratio gate in `task arch-lint` (analyze-modularity).
+The package exports only what something calls. When you need another helper (for example `Println`
+writing to `Out`), add it in the same change as its first caller: an exported function that nothing
+outside `internal/log` calls fails the `unreferenced_exported` gate in `task arch-lint` (analyze-modularity).
 
 This is enforced by the `forbidigo` linter. Exceptions are made for:
 - Test files (`*_test.go`)

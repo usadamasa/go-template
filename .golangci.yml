@@ -21,9 +21,9 @@ linters:
     forbidigo:
       forbid:
         - pattern: '^fmt\.Print.*$'
-          msg: "use internal/log.Logger instead of fmt.Print* for console output"
+          msg: "use internal/log instead of fmt.Print* for console output"
         - pattern: '^fmt\.Fprint.*\(os\.Stdout'
-          msg: "use internal/log.Logger instead of fmt.Fprint* to os.Stdout"
+          msg: "use internal/log instead of fmt.Fprint* to os.Stdout"
       analyze-types: true
       exclude-godoc-examples: true
 
