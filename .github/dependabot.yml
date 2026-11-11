@@ -17,7 +17,7 @@ updates:
 
   # devShell の Go と lint ツールの版は flake.lock の nixpkgs の rev で決まる。
   # nix の対象は flake.lock の input の更新だけで、security updates は出ない。
-  # flake.nix の中で fetchFromGitHub している go-arch-metrics のタグは対象外。
+  # go-arch-metrics の input も default branch の先頭へ動く (tag にはそろわない)。
   - package-ecosystem: nix
     directory: /
     schedule:

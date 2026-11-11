@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "go-arch-metrics": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794402515,
+        "narHash": "sha256-sygB3EdS91CX5wRWDhk7AyzdU9zU053gE0+KNOikWVw=",
+        "owner": "usadamasa",
+        "repo": "go-arch-metrics",
+        "rev": "1bb07a8b31417bb5a99cc331af3bd0304d4db8dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "usadamasa",
+        "repo": "go-arch-metrics",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1793540411,
@@ -18,6 +38,7 @@
     },
     "root": {
       "inputs": {
+        "go-arch-metrics": "go-arch-metrics",
         "nixpkgs": "nixpkgs"
       }
     }
