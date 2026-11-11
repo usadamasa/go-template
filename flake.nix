@@ -38,18 +38,20 @@
           # nixpkgs に無い go-arch-metrics plugin 同梱の CLI。plugin のリリースタグをそのまま使う
           go-arch-metrics = pkgs.buildGoModule.override { inherit go; } rec {
             pname = "go-arch-metrics";
-            version = "2026.0927.0";
+            version = "2026.1111.0";
             src = pkgs.fetchFromGitHub {
               owner = "usadamasa";
               repo = "go-arch-metrics";
               tag = version;
-              hash = "sha256-cwYDbuqIM7uFikWvZdtYf7LAO/5Bup2u9508V9Jz90w=";
+              hash = "sha256-sygB3EdS91CX5wRWDhk7AyzdU9zU053gE0+KNOikWVw=";
             };
-            vendorHash = "sha256-g+yaVIx4jxpAQ/+WrGKxhVeliYx7nLQe/zsGpxV4Fn4=";
+            vendorHash = "sha256-P34wsgGl4ZkID01O2yCx+CwaGWAQIxsA4zbtU2N2t58=";
             subPackages = [
               "cmd/analyze-modularity"
               "cmd/analyze-arch-lint"
             ];
+            # テストは go-arch-metrics の CI が持つ。build sandbox には git が無く、git を使うテストが落ちる
+            doCheck = false;
           };
         in
         {

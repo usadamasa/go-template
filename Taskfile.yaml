@@ -58,7 +58,7 @@ tasks:
       # パッケージツリーの転記へ劣化していく方向はこちらが止める｡指標の意味と対処は
       # analyze-arch-lint --metrics｡
       - analyze-arch-lint --strict .
-      - analyze-modularity --strict .
+      - analyze-modularity --strict --quiet .
 
   format:
     desc: Format code

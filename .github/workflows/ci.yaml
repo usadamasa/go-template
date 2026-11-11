@@ -86,6 +86,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7.0.1
+        with:
+          # analyze-modularity は揮発性を git の履歴から測る。shallow clone では全パッケージを揮発として扱う
+          fetch-depth: 0
 
       - name: Setup Nix devShell
         uses: usadamasa/gh-manage/actions/setup-nix@main
