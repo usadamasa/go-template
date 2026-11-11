@@ -18,6 +18,8 @@ updates:
   # devShell の Go と lint ツールの版は flake.lock の nixpkgs の rev で決まる。
   # nix の対象は flake.lock の input の更新だけで、security updates は出ない。
   # go-arch-metrics の input も default branch の先頭へ動く (tag にはそろわない)。
+  # flake.nix の devGo が差し替える go.dev の配布バイナリは対象外。nixpkgs の
+  # go_1_27 が差し替え先のバージョンに追いつけば、差し替えは自動で外れる。
   - package-ecosystem: nix
     directory: /
     schedule:
