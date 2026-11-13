@@ -1,5 +1,24 @@
 # Changelog
 
+## [v0.0.8](https://github.com/usadamasa/go-template/compare/v0.0.7...v0.0.8) - 2026-11-13
+
+- chore(deps): Bump actions/create-github-app-token from 3.2.0 to 3.3.0 by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/25
+- chore(deps): Bump Songmu/tagpr from 1.20.3 to 1.21.3 by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/24
+- setup-nix を gh-manage の共有 action へ移行する by @usadamasa in https://github.com/usadamasa/go-template/pull/30
+- ci: pull_request の types に edited を足す by @usadamasa in https://github.com/usadamasa/go-template/pull/32
+- ci: pull_request の types から edited を外す by @usadamasa in https://github.com/usadamasa/go-template/pull/35
+- chore(deps): Bump nixpkgs from `02c087f` to `3ec6363` by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/34
+- ci: actions.lock の検証を gh-manage の共有 composite に置き換える by @usadamasa in https://github.com/usadamasa/go-template/pull/36
+- chore(deps): Bump nixpkgs from `3ec6363` to `0bb2eed` by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/37
+- chore(deps): Bump Songmu/tagpr from 1.21.3 to 1.21.4 by @dependabot[bot] in https://github.com/usadamasa/go-template/pull/33
+- Go を 1.27.4 に上げる (セキュリティリリース対応) by @usadamasa in https://github.com/usadamasa/go-template/pull/38
+- go-arch-metrics を 2026.1111.0 に上げ analyze-modularity を --strict --quiet にする by @usadamasa in https://github.com/usadamasa/go-template/pull/39
+- go-arch-metrics を flake input で入れ Intel Mac を対象外にする by @usadamasa in https://github.com/usadamasa/go-template/pull/40
+- build: devShell の go を go.dev の配布バイナリに差し替える by @usadamasa in https://github.com/usadamasa/go-template/pull/43
+- build: go-arch-metrics の flake input を 183e30f へ上げる by @usadamasa in https://github.com/usadamasa/go-template/pull/44
+- CI の nix store のキャッシュを default branch で作る by @usadamasa in https://github.com/usadamasa/go-template/pull/45
+- build: go-arch-metrics の flake input を 2026.1111.1 へ上げる by @usadamasa in https://github.com/usadamasa/go-template/pull/47
+
 ## [v0.0.7](https://github.com/usadamasa/go-template/compare/v0.0.6...v0.0.7) - 2026-10-21
 
 - ci: Dependabot で gomod・github-actions・nix を週次で更新する by @usadamasa in https://github.com/usadamasa/go-template/pull/22
